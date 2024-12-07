@@ -1,71 +1,64 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import numpy as np
 
 # Load the saved XGBoost model
 model = joblib.load('xgb_churn_model.pkl')
 
-# Define the column names (feature names) expected by the model
-model_columns = [
-    'Call Failure', 'Complains', 'Subscription Length', 'Charge Amount', 
-    'Seconds of Use', 'Frequency of use', 'Frequency of SMS', 
-    'Distinct Called Numbers', 'Age Group', 'Tariff Plan', 
-    'Status', 'Age', 'Customer Value'
-]
+# Extract feature names from the model
+model_features = model.get_booster().feature_names
 
-# Define default values for features not provided by the user
-default_values = {
-    'Call Failure': 0,  # No call failure by default
-    'Complains': 0,      # No complaints by default
-    'Seconds of Use': 4472,  # Average seconds of use
-    'Frequency of use': 69,  # Average frequency of use
-    'Frequency of SMS': 73,  # Average frequency of SMS
-    'Distinct Called Numbers': 23,  # Average distinct called numbers
-    'Age Group': 2,  # Default middle age group
-    'Tariff Plan': 1,  # Default tariff plan
-    'Status': 1,  # Active status by default
-    'Customer Value': 470.97  # Default customer value
-}
-
-# Function to predict churn
-def predict_churn(input_data):
-    prediction = model.predict(input_data)
-    return prediction
+# Function to align input features dynamically
+def align_features(input_data):
+    # Ensure correct column order by reordering to match model_features
+    input_data = input_data.reindex(columns=model_features, fill_value=0)
+    return input_data
 
 # Streamlit app layout
-st.title("Customer Churn Prediction")
-st.write("This app predicts if a customer will churn based on the input features.")
+st.title("📊 Customer Churn Prediction App")
+st.write("Predict whether a telecom customer is likely to churn.")
 
-# Collect user input for essential features
-age = st.slider('Age', 15, 55, 30)
-subscription_length = st.slider('Subscription Length', 3, 47, 35)
-charge_amount = st.slider('Charge Amount', 0, 10, 1)
+# Collect user inputs interactively
+st.sidebar.header("Input Customer Details:")
+age = st.sidebar.number_input("Age", min_value=15, max_value=55, value=30)
+subscription_length = st.sidebar.number_input("Subscription Length (months)", min_value=3, max_value=47, value=35)
+charge_amount = st.sidebar.slider("Charge Amount", 0.0, 10.0, 1.0)
+seconds_of_use = st.sidebar.number_input("Seconds of Use", 0, 20000, 5000)
+frequency_of_use = st.sidebar.number_input("Frequency of Use", 0, 300, 50)
+frequency_of_sms = st.sidebar.number_input("Frequency of SMS", 0, 600, 100)
+distinct_called_numbers = st.sidebar.number_input("Distinct Called Numbers", 0, 100, 20)
+age_group = st.sidebar.selectbox("Age Group", [1, 2, 3, 4, 5])
+tariff_plan = st.sidebar.selectbox("Tariff Plan", [1, 2])
+status = st.sidebar.selectbox("Status", [1, 2])
 
-# Prepare the input data (using default values for non-user features)
+# Create input DataFrame
 input_data = pd.DataFrame({
-    'Call Failure': [default_values['Call Failure']],
-    'Complains': [default_values['Complains']],
+    'Call Failure': [0],  # Default values
+    'Complains': [0],     # Default values
     'Subscription Length': [subscription_length],
     'Charge Amount': [charge_amount],
-    'Seconds of Use': [default_values['Seconds of Use']],
-    'Frequency of use': [default_values['Frequency of use']],
-    'Frequency of SMS': [default_values['Frequency of SMS']],
-    'Distinct Called Numbers': [default_values['Distinct Called Numbers']],
-    'Age Group': [default_values['Age Group']],
-    'Tariff Plan': [default_values['Tariff Plan']],
-    'Status': [default_values['Status']],
+    'Seconds of Use': [seconds_of_use],
+    'Frequency of use': [frequency_of_use],
+    'Frequency of SMS': [frequency_of_sms],
+    'Distinct Called Numbers': [distinct_called_numbers],
+    'Age Group': [age_group],
+    'Tariff Plan': [tariff_plan],
+    'Status': [status],
     'Age': [age],
-    'Customer Value': [default_values['Customer Value']]
+    'Customer Value': [0]  # Default values
 })
 
-# Reorder the columns to match the model's expected order
-input_data = input_data[model_columns]
+# Align features dynamically
+input_data = align_features(input_data)
 
-# Get the prediction
-prediction = predict_churn(input_data)
-
-# Display the prediction
-if prediction == 1:
-    st.write("The customer is likely to churn.")
-else:
-    st.write("The customer is unlikely to churn.")
+# Predict churn
+if st.button("Predict Churn"):
+    try:
+        prediction = model.predict(input_data)
+        if prediction[0] == 1:
+            st.error("⚠️ The customer is likely to churn.")
+        else:
+            st.success("✅ The customer is unlikely to churn.")
+    except ValueError as e:
+        st.error(f"Prediction Error: {e}")
