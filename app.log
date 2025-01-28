@@ -1,0 +1,9 @@
+ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
+
+    Given type is: <class 'NoneType'>
+ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
+
+    Given type is: <class 'NoneType'>
+ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
+
+    Given type is: <class 'NoneType'>
