@@ -7,3 +7,25 @@ ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded
 ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
 
     Given type is: <class 'NoneType'>
+ERROR:root:Prediction failed: Invalid input values detected
+Input Data: {'Call Failure': [0], 'Complains': [0], 'Subscription Length': 24, 'Charge Amount': 45.99, 'Seconds of Use': 2500, 'Frequency of use': 60, 'Frequency of SMS': 120, 'Distinct Called Numbers': 50, 'Age Group': 1, 'Tariff Plan': 1, 'Status': 1, 'Age': 35, 'Customer Value': 0}
+ERROR:root:Prediction failed: Invalid input values detected
+Input Data: {'Call Failure': [0], 'Complains': [0], 'Subscription Length': 24, 'Charge Amount': 45.99, 'Seconds of Use': 2500, 'Frequency of use': 60, 'Frequency of SMS': 120, 'Distinct Called Numbers': 50, 'Age Group': 1, 'Tariff Plan': 1, 'Status': 1, 'Age': 35, 'Customer Value': 0}
+ERROR:root:Prediction failed: Invalid input values detected
+Input Data: {'Call Failure': [0], 'Complains': [0], 'Subscription Length': 24, 'Charge Amount': 45.99, 'Seconds of Use': 2500, 'Frequency of use': 60, 'Frequency of SMS': 120, 'Distinct Called Numbers': 49, 'Age Group': 1, 'Tariff Plan': 2, 'Status': 1, 'Age': 35, 'Customer Value': 0}
+ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
+
+    Given type is: <class 'NoneType'>
+Input Data: {'Call Failure': 0, 'Complains': 0, 'Subscription Length': 24, 'Charge Amount': 45.99, 'Seconds of Use': 2500, 'Frequency of use': 60, 'Frequency of SMS': 120, 'Distinct Called Numbers': 50, 'Age Group': 1, 'Tariff Plan': 1, 'Status': 1, 'Age': 35, 'Customer Value': 0}
+ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
+
+    Given type is: <class 'NoneType'>
+Input Data: {'Call Failure': 0, 'Complains': 0, 'Subscription Length': 3, 'Charge Amount': 45.99, 'Seconds of Use': 1, 'Frequency of use': 4, 'Frequency of SMS': 0, 'Distinct Called Numbers': 1, 'Age Group': 1, 'Tariff Plan': 2, 'Status': 1, 'Age': 35, 'Customer Value': 0}
+ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
+
+    Given type is: <class 'NoneType'>
+Input Data: {'Call Failure': 0, 'Complains': 0, 'Subscription Length': 52, 'Charge Amount': 45.99, 'Seconds of Use': 35000, 'Frequency of use': 396, 'Frequency of SMS': 800, 'Distinct Called Numbers': 90, 'Age Group': 1, 'Tariff Plan': 2, 'Status': 1, 'Age': 35, 'Customer Value': 0}
+ERROR:root:Prediction failed: Animation data must be one of Lottie URL or loaded JSON represented by dict or string/bytes UTF-8 JSON representative.  
+
+    Given type is: <class 'NoneType'>
+Input Data: {'Call Failure': 0, 'Complains': 0, 'Subscription Length': 52, 'Charge Amount': 45.99, 'Seconds of Use': 35000, 'Frequency of use': 396, 'Frequency of SMS': 800, 'Distinct Called Numbers': 90, 'Age Group': 3, 'Tariff Plan': 2, 'Status': 1, 'Age': 40, 'Customer Value': 0}

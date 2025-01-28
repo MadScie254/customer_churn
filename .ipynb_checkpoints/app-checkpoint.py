@@ -39,8 +39,10 @@ def validate_features(input_df):
     try:
         aligned_df = input_df.reindex(columns=model_features, fill_value=0)
         if list(aligned_df.columns) != list(model_features):
-            raise ValueError("Feature mismatch detected")
-        return aligned_df
+            missing = set(model_features) - set(input_df.columns)
+            extra = set(input_df.columns) - set(model_features)
+            raise ValueError(f"Feature mismatch. Missing: {missing}, Extra: {extra}")
+        return aligned_df.astype(float)
     except Exception as e:
         logging.error(f"Feature validation failed: {str(e)}")
         st.error("System Error: Feature configuration issue")
@@ -174,8 +176,8 @@ with st.sidebar:
 
 # =================== DATA PROCESSING ===================
 input_template = {
-    'Call Failure': [0],
-    'Complains': [0],
+    'Call Failure': 0,
+    'Complains': 0,
     'Subscription Length': subscription_length,
     'Charge Amount': charge_amount,
     'Seconds of Use': usage_seconds,
@@ -189,7 +191,12 @@ input_template = {
     'Customer Value': 0
 }
 
-processed_data = pd.DataFrame(input_template).pipe(validate_features)
+try:
+    processed_data = pd.DataFrame(input_template, index=[0])
+    processed_data = validate_features(processed_data)
+except Exception as e:
+    st.error(f"Data processing error: {str(e)}")
+    st.stop()
 
 # =================== MAIN INTERFACE ===================
 col1, col2 = st.columns([2, 1])
@@ -203,9 +210,9 @@ with col1:
     if st.button("Run Churn Analysis", type="primary", use_container_width=True):
         with st.spinner("Analyzing customer patterns..."):
             try:
-                # Add validation checks
-                if not all(isinstance(val, (int, float)) for val in input_template.values()):
-                    raise ValueError("Invalid input values detected")
+                # Validate input types
+                if not processed_data.select_dtypes(include=['number']).shape[1] == processed_data.shape[1]:
+                    raise ValueError("Non-numeric values detected in input data")
                 
                 prediction = model.predict(processed_data)
                 confidence = model.predict_proba(processed_data)[0][1]
